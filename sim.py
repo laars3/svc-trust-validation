@@ -41,3 +41,13 @@ def pick_validators(task_num, validator_num, k, rng): # k validators per task
         redraw_i = redraw_i[dup]
 
     return validator_i
+
+def validator_vote(correct_worker, validator_rel,rng): # sect 3, each validator makes correct call with prob R
+    random_num = rng.random(validator_rel.shape)
+    correct_call = random_num < validator_rel
+
+    worker_correct_column = correct_worker[:, None]
+
+    vote_valid = correct_call == worker_correct_column
+
+    return vote_valid
