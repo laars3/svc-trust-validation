@@ -4,3 +4,5 @@ ENVIRONMENTS = {"Trusted": (0.9, 1.0), "Semi-Trusted": (0.7, 0.9),"Untrusted": (
 K_VALUES = [1,3,5,7] # num of validators assigned to one worker result
 SIM_HOURS = 24
 N_SEEDS = 1000
+SEED =0
+ARR_RATE_PM = 300 # guessed value
