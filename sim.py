@@ -34,7 +34,7 @@ def pick_validators(task_num, validator_num, k, rng): # k validators per task
     redraw_i = np.flatnonzero(dup)
 
     while redraw_i.size > 0:
-        new_rows = rng.integers(0, redraw_i.size, size=(redraw_i, k))
+        new_rows = rng.integers(0, validator_num, size=(redraw_i.size, k))
         validator_i[redraw_i] = new_rows
 
         dup = has_dup(validator_i[redraw_i])
