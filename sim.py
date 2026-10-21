@@ -3,19 +3,19 @@ import config, algorithms
 
 def population_reliability(work_num, validator_num, env, rng): # reliability score randomly selected between bounds
     low, high = config.ENVIRONMENTS[env]
-    r_workers = rng.uniform(low, high, size=work_num)
-    r_validators = rng.uniform(low, high, size=validator_num)
-    return r_workers, r_validators
+    worker_pool_rel = rng.uniform(low, high, size=work_num)
+    validator_pool_rel = rng.uniform(low, high, size=validator_num)
+    return worker_pool_rel, validator_pool_rel
 
-def create_tasks(r_workers, rng): # 24 hr tasks and check for worker result
+def create_tasks(worker_pool_rel, rng): # 24 hr tasks and check for worker result
     mean= config.ARR_RATE_PM * 60 * config.SIM_HOURS
     task_num =rng.poisson(mean) # used to pick values around mean to model small change
 
-    worker_i = rng.integers(0, len(r_workers), size=task_num)
-    task_rel = r_workers[worker_i]
+    worker_i = rng.integers(0, len(worker_pool_rel), size=task_num)
+    task_worker_rel = worker_pool_rel[worker_i]
     random_num = rng.random(task_num)
 
-    correct_worker = random_num < task_rel
+    correct_worker = random_num < task_worker_rel
 
     return correct_worker
 
@@ -43,9 +43,9 @@ def pick_validators(task_num, validator_num, k, rng): # k validators per task
 
     return validator_i
 
-def validator_vote(correct_worker, validator_rel,rng): # sect 3, each validator makes correct call with prob R
-    random_num = rng.random(validator_rel.shape)
-    correct_call = random_num < validator_rel
+def validator_vote(correct_worker, task_validator_rel,rng): # sect 3, each validator makes correct call with prob R
+    random_num = rng.random(task_validator_rel.shape)
+    correct_call = random_num < task_validator_rel
 
     worker_correct_column = correct_worker[:, None]
 
@@ -89,7 +89,7 @@ def false_rejection_rate(counts): #section 14
 
     return FRR
 
-def make_rows(seed, work_num, validator_num, env, algorithm, k, correct_worker, accept): # result row for csv
+def make_row(seed, work_num, validator_num, env, algorithm, k, correct_worker, accept): # result row for csv
     counts = outcome_counts(correct_worker, accept)
 
     row = {"seed": seed, "work_num": work_num, "validator_num": validator_num, "env":env, "algorithm": algorithm, "k":k}
@@ -104,8 +104,13 @@ def make_rows(seed, work_num, validator_num, env, algorithm, k, correct_worker, 
 def simulate_run(work_num, validator_num, env, seed): # full simulation for one scenario
     rng = np.random.default_rng(seed)
 
-    r_workers, r_validators = population_reliability(work_num, validator_num,env, rng)
-    correct_worker= create_tasks(r_workers, rng)
+    worker_pool_rel, validator_pool_rel = population_reliability(work_num, validator_num,env, rng)
+    correct_worker= create_tasks(worker_pool_rel, rng)
     task_num = len(correct_worker)
+
+    max_k = max(config.K_VALUES)
+    validator_i = pick_validators(task_num, max_k, rng)
+    task_validator_rel = validator_pool_rel[validator_i]
+
 
 

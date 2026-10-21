@@ -11,11 +11,11 @@ def majority_vote(vote_valid): # algorithm 2
 
     return accept
 
-def weighted_vote(vote_valid,validator_rel ): # algorithm 3
+def weighted_vote(vote_valid,task_validator_rel ): # algorithm 3
 
     vote_invalid = 1 - vote_valid
-    valid_weight = validator_rel * vote_valid # R where vote valid, else 0
-    invalid_weight = validator_rel * vote_invalid
+    valid_weight = task_validator_rel * vote_valid # R where vote valid, else 0
+    invalid_weight = task_validator_rel * vote_invalid
 
     s_valid = valid_weight.sum(axis=1)
     s_invalid = invalid_weight.sum(axis=1)
