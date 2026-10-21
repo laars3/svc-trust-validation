@@ -68,3 +68,10 @@ def outcome_counts(correct_worker, accept): # worker result outcomes
     counts = {"detected_fail": int(detected.sum()), "undetected_fail": int(undetected.sum()), "correct_accept": int(correct_accept.sum()), "correct_reject":int(correct_reject.sum())}
 
     return counts
+
+def probability_of_detection(counts): # 11
+    incorrect_total = counts["detected_fail"] + counts["undetected_fail"]
+
+    Pd = counts["detected_fail"] / incorrect_total
+    return Pd
+
