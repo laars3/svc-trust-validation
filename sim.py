@@ -1,5 +1,5 @@
 import numpy as np
-import config
+import config, algorithms
 
 def population_reliability(work_num, validator_num, env, rng): # reliability score randomly selected between bounds
     low, high = config.ENVIRONMENTS[env]
@@ -88,3 +88,22 @@ def false_rejection_rate(counts): #section 14
     FRR = counts["false_reject"]/ correct_total
 
     return FRR
+
+def make_rows(seed, work_num, validator_num, env, algorithm, k, correct_worker, accept): # result row for csv
+    counts = outcome_counts(correct_worker, accept)
+
+    row = {"seed": seed, "work_num": work_num, "validator_num": validator_num, "env":env, "algorithm": algorithm, "k":k}
+    row.update(counts)
+
+    row["Pd"]= probability_of_detection(counts)
+    row["FAR"] = false_acceptance_rate(counts)
+    row["FRR"] = false_rejection_rate(counts)
+
+def simulate_run(work_num, validator_num, env, seed): # full simulation for one scenario
+    rng = np.random.default_rng(seed)
+
+    r_workers, r_validators = population_reliability(work_num, validator_num,env, rng)
+    correct_worker= create_tasks(r_workers, rng)
+    task_num = len(correct_worker)
+
+
