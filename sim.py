@@ -65,13 +65,26 @@ def outcome_counts(correct_worker, accept): # worker result outcomes
     correct_reject = correct_worker * rejected
 
     # classify events
-    counts = {"detected_fail": int(detected.sum()), "undetected_fail": int(undetected.sum()), "correct_accept": int(correct_accept.sum()), "correct_reject":int(correct_reject.sum())}
+    counts = {"detected_fail": int(detected.sum()), "undetected_fail": int(undetected.sum()), "true_accept": int(correct_accept.sum()), "false_reject":int(correct_reject.sum())}
 
     return counts
 
-def probability_of_detection(counts): # 11
+def probability_of_detection(counts): # section 11
     incorrect_total = counts["detected_fail"] + counts["undetected_fail"]
 
     Pd = counts["detected_fail"] / incorrect_total
     return Pd
 
+def false_acceptance_rate(counts): # section 13
+    incorrect_total = counts["detected_fail"] + counts["undetected_fail"]
+
+    FAR = counts["undetected_fail"] /incorrect_total
+
+    return FAR
+
+def false_rejection_rate(counts): #section 14
+    correct_total = counts["true_accept"] + counts["false_reject"]
+
+    FRR = counts["flase_reject"]/ correct_total
+
+    return FRR
