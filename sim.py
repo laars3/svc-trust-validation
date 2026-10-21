@@ -85,6 +85,6 @@ def false_acceptance_rate(counts): # section 13
 def false_rejection_rate(counts): #section 14
     correct_total = counts["true_accept"] + counts["false_reject"]
 
-    FRR = counts["flase_reject"]/ correct_total
+    FRR = counts["false_reject"]/ correct_total
 
     return FRR
