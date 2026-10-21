@@ -99,6 +99,8 @@ def make_rows(seed, work_num, validator_num, env, algorithm, k, correct_worker, 
     row["FAR"] = false_acceptance_rate(counts)
     row["FRR"] = false_rejection_rate(counts)
 
+    return row
+
 def simulate_run(work_num, validator_num, env, seed): # full simulation for one scenario
     rng = np.random.default_rng(seed)
 
