@@ -102,15 +102,36 @@ def make_row(seed, work_num, validator_num, env, algorithm, k, correct_worker, a
     return row
 
 def simulate_run(work_num, validator_num, env, seed): # full simulation for one scenario
-    rng = np.random.default_rng(seed)
+    rng = np.random.default_rng(seed) # random num with seed
 
     worker_pool_rel, validator_pool_rel = population_reliability(work_num, validator_num,env, rng)
     correct_worker= create_tasks(worker_pool_rel, rng)
     task_num = len(correct_worker)
 
     max_k = max(config.K_VALUES)
-    validator_i = pick_validators(task_num, max_k, rng)
+    validator_i = pick_validators(task_num,validator_num, max_k, rng)
     task_validator_rel = validator_pool_rel[validator_i]
 
+    vote_valid = validator_vote(correct_worker, task_validator_rel, rng)
 
+    rows =[]
 
+    # algo 1 for k=1
+    accept= algorithms.single_validator(vote_valid)
+    rows.append(make_row(seed, work_num, validator_num, env, "single", 1, correct_worker, accept))
+
+    # algo 2 and 3 for k>1 where k prime
+    for k in config.K_VALUES:
+        if k ==1:
+            continue
+
+        votes_k = vote_valid[:, :k]
+        task_validator_rel_k = task_validator_rel[:, :k]
+
+        accept= algorithms.majority_vote(votes_k)
+        rows.append(make_row(seed, work_num, validator_num, env, "majority", k, correct_worker, accept))
+
+        accept = algorithms.weighted_vote(votes_k, task_validator_rel_k)
+        rows.append(make_row(seed, work_num, validator_num,env, "weighted", k, correct_worker, accept))
+
+    return rows
