@@ -52,3 +52,19 @@ def validator_vote(correct_worker, validator_rel,rng): # sect 3, each validator 
     vote_valid = correct_call == worker_correct_column
 
     return vote_valid
+
+def outcome_counts(correct_worker, accept): # worker result outcomes
+
+    wrong_worker = 1-correct_worker
+    rejected = 1-accept
+
+    detected = wrong_worker * rejected
+    undetected = wrong_worker * accept
+
+    correct_accept = correct_worker * accept
+    correct_reject = correct_worker * rejected
+
+    # classify events
+    counts = {"detected_fail": int(detected.sum()), "undetected_fail": int(undetected.sum()), "correct_accept": int(correct_accept.sum()), "correct_reject":int(correct_reject.sum())}
+
+    return counts
