@@ -14,7 +14,7 @@ running
 2) run analysis.ipynb
 
 assumptions
-- arrival rate is set to 300 tasks/min, poisson, so about 432k tasks per 24h. each task goes to a random worker
+- arrival rate is set to 300 tasks/min, poisson, so about 432k tasks per 24h. each task goes to a random worker, assigned by vccontroller
 - a validator's R is the same for correct and incorrect results
 - votes are drawn once at k=7 and smaller k use the first k, so all algorithms see same votes
 - 1000 seeds per config

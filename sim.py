@@ -7,11 +7,11 @@ def population_reliability(work_num, validator_num, env, rng): # reliability sco
     validator_pool_rel = rng.uniform(low, high, size=validator_num)
     return worker_pool_rel, validator_pool_rel
 
-def create_tasks(worker_pool_rel, rng): # 24 hr tasks and check for worker result
+def create_tasks(worker_pool_rel, rng): # tasks arriving at VCC
     mean= config.ARR_RATE_PM * 60 * config.SIM_HOURS
     task_num =rng.poisson(mean) # used to pick values around mean to model small change
 
-    worker_i = rng.integers(0, len(worker_pool_rel), size=task_num)
+    worker_i = rng.integers(0, len(worker_pool_rel), size=task_num) # controller sending task to rand worker
     task_worker_rel = worker_pool_rel[worker_i]
     random_num = rng.random(task_num)
 

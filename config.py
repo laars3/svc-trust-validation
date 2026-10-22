@@ -5,4 +5,4 @@ K_VALUES = [1,3,5,7] # num of validators assigned to one worker result
 SIM_HOURS = 24
 N_SEEDS = 1000
 SEED =0
-ARR_RATE_PM = 300 # guessed value
+ARR_RATE_PM = 300 # tasks arriving at controller, then dist further
